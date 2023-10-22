@@ -38,7 +38,7 @@ class Func:
         # Inverse of derivative of f at (x,y).  This method throws an exception is Df is not invertible.
         # We'll calculate the inverse ourselves rather than rely on numpy.
         # Calculate the determinant of Df
-        det_Df = 2 * x[1]**2 * math.exp(2*x[0]) + 40 * x[1]**5 * math.exp(x[0]) - 4 * x[1]**2 * math.exp(2*x[0])
+        det_Df = 40 * x[1]**5 * math.exp(x[0]) - 2 * x[1]**2 * math.exp(2*x[0])
 
         if np.allclose(det_Df,np.array([[0,0],[0,0]])):
             # Df is singular and cannot be inverted.
