@@ -57,24 +57,24 @@ class NewtonRaphson:
 
     def __init__(self,func,x):
         # Constructor.  func is the function of interest
-        self.func = func
+        self._func = func
 
         # Points stores the points at each iteration
-        self.points = [x]
+        self._points = [x]
 
         # iter_vals stores that value of func.f at each iteration
-        self.iter_vals = [self.func.f(x)]
+        self._iter_vals = [self._func.f(x)]
 
         # cur_iter stores the current iteration of the algorithm
-        self.cur_iter = 0
+        self._cur_iter = 0
 
     def run_iteration(self):
         # Run a single iteration of Newton-Raphson.
-        self.cur_iter += 1
-        x = self.points[-1]
-        self.points.append(x - self.func.Df_inv(x) @ self.func.f(x))
-        new_x = self.points[-1]
-        self.iter_vals.append(self.func.f(new_x))
+        self._cur_iter += 1
+        x = self._points[-1]
+        self._points.append(x - self._func.Df_inv(x) @ self._func.f(x))
+        new_x = self._points[-1]
+        self._iter_vals.append(self._func.f(new_x))
 
     def run_to_convergence(self, max_iters = 200, rtol = 1e-5, atol = 1e-8 ):
         # Run Newton-Raphson until convergence of f(x_n) to 0 or max_iters iterations.
@@ -84,11 +84,31 @@ class NewtonRaphson:
         converged = False
         for i in range(max_iters):
             self.run_iteration()
-            if np.allclose(self.iter_vals[-1],zero,rtol,atol):
+            if np.allclose(self._iter_vals[-1],zero,rtol,atol):
                 converged = True
                 break
 
         return converged
+
+    # Class attributes
+    @property
+    def cur_iter(self):
+        """ The last (i.e., current) iteration of Newton-Raphson. """
+        return self._cur_iter
+
+    @property
+    def points(self):
+        """ A list of points calculated using Newton-Raphson. This list is a copy of the one stored
+            internally by the NewtonRaphson class, so you may modify this list as you wish. """
+        return self._points.copy()
+
+    @ property
+    def iter_vals(self):
+        """ A list of values of func based on the sequence of points determined by Newton-Raphson.  This
+            list is a copy of the one stored internally by the NewtonRaphson class, so you may modify this
+            list as you wish.
+        """
+        return self._iter_vals.copy()
 
 
 if __name__ == '__main__':
